@@ -3,19 +3,42 @@ import * as ReactDOM from 'react-dom';
 
 const defaultOptions = {
   timeout: 3000,
+  idToastContainer: 'minimal-react-toast',
+  styleToastContainer: undefined,
 };
 
+interface IStyleToastContainer {
+  [key: string]: any;
+}
 interface IUseToast {
   timeout?: number;
+  idToastContainer?: string;
+  styleToastContainer?: IStyleToastContainer;
 }
 
-function useToast({ timeout }: IUseToast = defaultOptions) {
+function useToast(options: IUseToast = defaultOptions) {
+  const {
+    timeout = defaultOptions.timeout,
+    idToastContainer = defaultOptions.idToastContainer,
+    styleToastContainer = defaultOptions.styleToastContainer,
+  } = options;
   const [show, setShow] = React.useState(false);
   const [mountNode, setMountNode] = React.useState<null | HTMLElement>(null);
 
   const timeoutIdRef = React.useRef<any>(null);
 
   const triggerToast = React.useCallback(() => {
+    // const toastContainerNodes = document.querySelectorAll(
+    //   '[data-minimal-toast]'
+    // );
+    // const toastContainerNodesArray = Array.prototype.slice.call(
+    //   toastContainerNodes
+    // );
+    // console.log(
+    //   'useToast -> toastContainerNodesArray',
+    //   toastContainerNodesArray
+    // );
+
     if (timeoutIdRef.current) {
       clearTimeout(timeoutIdRef.current);
       timeoutIdRef.current = null;
@@ -42,10 +65,44 @@ function useToast({ timeout }: IUseToast = defaultOptions) {
   // uwc-debug
   React.useEffect(() => {
     if (show) {
+      let minimalToastContainerDiv = document.getElementById(idToastContainer);
+
+      if (!minimalToastContainerDiv) {
+        minimalToastContainerDiv = document.createElement('div');
+        minimalToastContainerDiv.id = idToastContainer;
+
+        // add styling for the container element
+
+        if (
+          styleToastContainer &&
+          Object.prototype.toString.call(styleToastContainer) ===
+            '[object Object]' &&
+          Object.keys(styleToastContainer).length > 0
+        ) {
+          Object.keys(styleToastContainer).forEach(property => {
+            // @ts-ignore
+            minimalToastContainerDiv.style[property] =
+              // @ts-ignore
+              styleToastContainer[property];
+          });
+        }
+      }
+
+      // console.log(
+      //   'useToast -> minimalToastContainerDiv',
+      //   minimalToastContainerDiv
+      // );
+
       const div = document.createElement('div');
       const divId = new Date().getTime();
       div.id = `${divId}`;
-      document.body.appendChild(div);
+      div.setAttribute('data-minimal-toast', `${divId}`);
+
+      if (minimalToastContainerDiv) {
+        minimalToastContainerDiv.appendChild(div);
+      }
+
+      document.body.appendChild(minimalToastContainerDiv);
       setMountNode(div);
     } else {
       if (mountNode) {

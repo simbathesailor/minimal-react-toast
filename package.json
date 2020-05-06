@@ -29,7 +29,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "minimal-react-toast",
+  "name": "@simabthesailor/minimal-react-toast",
   "author": "simbathesailor",
   "module": "dist/minimal-react-toast.esm.js",
   "devDependencies": {

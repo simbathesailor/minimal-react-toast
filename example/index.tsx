@@ -10,13 +10,9 @@ export const LinkCopiedToastComponent = styled.div`
   background-color: white;
   padding: 10px;
   border-radius: 4px;
-  position: fixed;
-  top: 80px;
-  left: 50%;
+
   color: #0697a2;
   font-size: 0.75rem;
-  z-index: 12;
-  transform: translateX(-50%);
 `;
 function SuccessToastComponent() {
   return (
@@ -27,14 +23,25 @@ function SuccessToastComponent() {
 }
 
 function App() {
-  const [triggerToast, toastRender] = useToast();
-  const [counter, setCounter] = React.useState(0);
+  const [triggerToast, toastRender] = useToast({
+    styleToastContainer: {
+      border: '1px solid red',
+      position: 'fixed',
+      top: '80px',
+      left: ' 50%',
+      transform: 'translateX(-50%)',
+      zIndex: '12',
+    },
+  });
+  const [triggerToast2, toastRender2] = useToast();
+  // const [counter, setCounter] = React.useState(0);
   const finalToast = toastRender();
+  const finalToast2 = toastRender2();
 
   // uwc-debug
   React.useEffect(() => {
     console.log('wow');
-  }, [counter, triggerToast]);
+  }, [triggerToast]);
   // React.useEffect(() => {
   // 	if (hasCopied) {
   // 		triggerToast();
@@ -51,14 +58,24 @@ function App() {
     <>
       <button
         onClick={() => {
-          setCounter(c => c + 1);
+          // setCounter(c => c + 1);
           triggerToast();
         }}
       >
         Click me
       </button>
+
+      <button
+        onClick={() => {
+          // setCounter(c => c + 1);
+          triggerToast2();
+        }}
+      >
+        Click me 2
+      </button>
       {/* @ts-ignore */}
       {finalToast(<SuccessToastComponent />)}
+      {finalToast2(<SuccessToastComponent />)}
     </>
   );
 }
