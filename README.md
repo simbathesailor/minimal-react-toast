@@ -75,4 +75,8 @@ interface IUseToast {
 }
 ```
 
+## Demo
+
+[Demo](https://codesandbox.io/s/pedantic-blackburn-g9jdn)
+
 Built with [TSDX](https://github.com/jaredpalmer/tsdx)
