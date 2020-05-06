@@ -20,6 +20,8 @@ or
 ## Usage
 
 ```jsx
+import { useToast } from '@simbathesailor/minimal-react-toast';
+
 function SuccessToastComponent() {
   return <div>Button Clicked successfully !!</div>;
 }
